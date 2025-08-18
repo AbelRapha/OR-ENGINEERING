@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { AddressForm } from "@/components/AddressForm";
 import { ResultsDisplay, Results } from "@/components/ResultsDisplay";
-import { MadeWithDyad } from "@/components/made-with-dyad";
 import { showError, showSuccess } from "@/utils/toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
@@ -144,7 +143,6 @@ const Index = () => {
             </Alert>
           )}
         </main>
-        <MadeWithDyad />
       </div>
     </div>
   );
