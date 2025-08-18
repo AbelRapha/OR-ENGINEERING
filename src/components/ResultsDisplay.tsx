@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MatrixTable } from "./MatrixTable";
 import { downloadCsv, downloadExcel } from "@/utils/download";
 import { Download } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
 export interface Results {
   distances: number[][];
@@ -40,30 +41,40 @@ export const ResultsDisplay = ({ results, distUnit, timeUnit }: ResultsDisplayPr
 
   return (
     <div className="space-y-8 mt-8">
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-4 border rounded-lg">
-        <div className="space-y-2">
-          <Label htmlFor="download-format">Formato de Download</Label>
-          <Select value={downloadFormat} onValueChange={setDownloadFormat}>
-            <SelectTrigger id="download-format" className="w-[180px]">
-              <SelectValue placeholder="Selecione o formato" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Excel">Excel (.xlsx)</SelectItem>
-              <SelectItem value="CSV">CSV (.csv)</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex gap-4">
-          <Button onClick={() => handleDownload("distances")}>
-            <Download className="mr-2 h-4 w-4" />
-            Baixar Distâncias
-          </Button>
-          <Button onClick={() => handleDownload("durations")}>
-            <Download className="mr-2 h-4 w-4" />
-            Baixar Durações
-          </Button>
-        </div>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Exportar Resultados</CardTitle>
+          <CardDescription>
+            Baixe as matrizes de distância e duração no formato desejado.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div className="space-y-2 w-full sm:w-auto">
+              <Label htmlFor="download-format">Formato de Download</Label>
+              <Select value={downloadFormat} onValueChange={setDownloadFormat}>
+                <SelectTrigger id="download-format" className="w-full sm:w-[180px]">
+                  <SelectValue placeholder="Selecione o formato" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Excel">Excel (.xlsx)</SelectItem>
+                  <SelectItem value="CSV">CSV (.csv)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+              <Button onClick={() => handleDownload("distances")} className="w-full">
+                <Download className="mr-2 h-4 w-4" />
+                Baixar Distâncias
+              </Button>
+              <Button onClick={() => handleDownload("durations")} className="w-full">
+                <Download className="mr-2 h-4 w-4" />
+                Baixar Durações
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <MatrixTable
         title={`Matriz de Distâncias (${distUnit})`}

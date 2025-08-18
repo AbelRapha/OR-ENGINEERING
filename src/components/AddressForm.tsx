@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2 } from "lucide-react";
+import { Loader2, MapPin, Ruler, Clock } from "lucide-react";
 
 interface AddressFormProps {
   origins: string;
@@ -33,12 +33,18 @@ export const AddressForm = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Calculadora de Matriz de Distância e Duração</CardTitle>
+        <CardTitle>Parâmetros de Roteirização</CardTitle>
+        <CardDescription>
+          Insira as origens, destinos e configure as unidades de medida para o cálculo.
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <Label htmlFor="origins">Endereços de Origem</Label>
+            <Label htmlFor="origins" className="flex items-center">
+              <MapPin className="mr-2 h-4 w-4 text-muted-foreground" />
+              Endereços de Origem
+            </Label>
             <Textarea
               id="origins"
               placeholder="Insira um endereço por linha..."
@@ -49,7 +55,10 @@ export const AddressForm = ({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="destinations">Endereços de Destino</Label>
+            <Label htmlFor="destinations" className="flex items-center">
+              <MapPin className="mr-2 h-4 w-4 text-muted-foreground" />
+              Endereços de Destino
+            </Label>
             <Textarea
               id="destinations"
               placeholder="Insira um endereço por linha..."
@@ -62,7 +71,10 @@ export const AddressForm = ({
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <Label htmlFor="dist-unit">Unidade de Medida (Distância)</Label>
+            <Label htmlFor="dist-unit" className="flex items-center">
+              <Ruler className="mr-2 h-4 w-4 text-muted-foreground" />
+              Unidade de Medida (Distância)
+            </Label>
             <Select value={distUnit} onValueChange={setDistUnit} disabled={isLoading}>
               <SelectTrigger id="dist-unit">
                 <SelectValue placeholder="Selecione a unidade" />
@@ -74,7 +86,10 @@ export const AddressForm = ({
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="time-unit">Unidade de Medida (Tempo)</Label>
+            <Label htmlFor="time-unit" className="flex items-center">
+              <Clock className="mr-2 h-4 w-4 text-muted-foreground" />
+              Unidade de Medida (Tempo)
+            </Label>
             <Select value={timeUnit} onValueChange={setTimeUnit} disabled={isLoading}>
               <SelectTrigger id="time-unit">
                 <SelectValue placeholder="Selecione a unidade" />
