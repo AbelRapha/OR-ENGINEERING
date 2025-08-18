@@ -35,7 +35,7 @@ export const AddressForm = ({
       <CardHeader>
         <CardTitle>Parâmetros de Roteirização</CardTitle>
         <CardDescription>
-          Insira as origens, destinos e configure as unidades de medida para o cálculo.
+          Forneça os endereços de origem/destino e configure as unidades de medida.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -45,6 +45,9 @@ export const AddressForm = ({
               <MapPin className="mr-2 h-4 w-4 text-muted-foreground" />
               Endereços de Origem
             </Label>
+            <p className="text-xs text-muted-foreground">
+              Ex: Av. Paulista, 1578, São Paulo, SP
+            </p>
             <Textarea
               id="origins"
               placeholder="Insira um endereço por linha..."
@@ -59,6 +62,9 @@ export const AddressForm = ({
               <MapPin className="mr-2 h-4 w-4 text-muted-foreground" />
               Endereços de Destino
             </Label>
+            <p className="text-xs text-muted-foreground">
+              Ex: Praça da Sé, s/n, São Paulo, SP
+            </p>
             <Textarea
               id="destinations"
               placeholder="Insira um endereço por linha..."
