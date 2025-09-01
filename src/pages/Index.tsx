@@ -41,7 +41,7 @@ const Index = () => {
       for (const [i, address] of originLines.entries()) {
         const result = await geocodeAddress(address);
         if (!result) {
-          throw new Error(`Não foi possível geocodificar a origem: ${address}`);
+          throw new Error(`Falha ao geocodificar a origem: "${address}"\n\nPor favor, verifique o endereço e tente usar um formato mais completo, como:\n"Av. Paulista, 1578, São Paulo, SP"`);
         }
         geocodedOrigins.push(result);
         geocodedCount++;
@@ -55,7 +55,7 @@ const Index = () => {
       for (const [i, address] of destinationLines.entries()) {
         const result = await geocodeAddress(address);
         if (!result) {
-          throw new Error(`Não foi possível geocodificar o destino: ${address}`);
+          throw new Error(`Falha ao geocodificar o destino: "${address}"\n\nPor favor, verifique o endereço e tente usar um formato mais completo, como:\n"Praça da Sé, s/n, São Paulo, SP"`);
         }
         geocodedDestinations.push(result);
         geocodedCount++;
@@ -93,7 +93,16 @@ const Index = () => {
 
     } catch (error: any) {
       console.error("Calculation failed:", error);
-      showError(error.message || "Ocorreu um erro durante o cálculo. Verifique o console.");
+      const errorMessage = error.message || "Ocorreu um erro durante o cálculo. Verifique o console.";
+      
+      if (errorMessage.includes("\n\n")) {
+        const [title, ...descriptionParts] = errorMessage.split("\n\n");
+        const description = descriptionParts.join("\n\n");
+        showError(title, description);
+      } else {
+        showError(errorMessage);
+      }
+      
       setProgress(0);
     } finally {
       setTimeout(() => {
