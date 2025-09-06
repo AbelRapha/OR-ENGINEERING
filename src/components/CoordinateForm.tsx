@@ -23,8 +23,8 @@ interface CoordinateFormProps {
   setTimeUnit: (value: string) => void;
   coordinateSystem: CoordinateSystem;
   setCoordinateSystem: (value: CoordinateSystem) => void;
-  coordinateFormat: 'dd' | 'dms';
-  setCoordinateFormat: (value: 'dd' | 'dms') => void;
+  coordinateFormat: 'dd' | 'dms' | 'rad';
+  setCoordinateFormat: (value: 'dd' | 'dms' | 'rad') => void;
   onSubmit: () => void;
   isLoading: boolean;
 }
@@ -49,8 +49,14 @@ export const CoordinateForm = ({
   onSubmit,
   isLoading,
 }: CoordinateFormProps) => {
-  const latPlaceholder = coordinateFormat === 'dd' ? "-23.5505\n-22.9068" : "-23° 33' 1.8\"\n-22° 54' 24.48\"";
-  const lonPlaceholder = coordinateFormat === 'dd' ? "-46.6333\n-43.1729" : "-46° 38' 0.12\"\n-43° 10' 22.44\"";
+  const latPlaceholder = 
+    coordinateFormat === 'dd' ? "-23.5505\n-22.9068" :
+    coordinateFormat === 'dms' ? "-23° 33' 1.8\"\n-22° 54' 24.48\"" :
+    "-0.4110\n-0.3998";
+  const lonPlaceholder = 
+    coordinateFormat === 'dd' ? "-46.6333\n-43.1729" :
+    coordinateFormat === 'dms' ? "-46° 38' 0.12\"\n-43° 10' 22.44\"" :
+    "-0.8139\n-0.7535";
 
   return (
     <Card>
@@ -95,8 +101,8 @@ export const CoordinateForm = ({
             <RadioGroup
               defaultValue="dd"
               value={coordinateFormat}
-              onValueChange={(val) => setCoordinateFormat(val as 'dd' | 'dms')}
-              className="flex items-center space-x-4 pt-2"
+              onValueChange={(val) => setCoordinateFormat(val as 'dd' | 'dms' | 'rad')}
+              className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-2"
               disabled={isLoading}
             >
               <div className="flex items-center space-x-2">
@@ -106,6 +112,10 @@ export const CoordinateForm = ({
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="dms" id="dms" />
                 <Label htmlFor="dms">Graus, Min, Seg</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="rad" id="rad" />
+                <Label htmlFor="rad">Radianos</Label>
               </div>
             </RadioGroup>
           </div>

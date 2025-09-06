@@ -65,3 +65,12 @@ export const dmsToDd = (dms: string): number => {
 
   return sign * dd;
 };
+
+/**
+ * Converte radianos para graus decimais.
+ * @param rad O valor em radianos.
+ * @returns O valor em graus decimais.
+ */
+export const radToDd = (rad: number): number => {
+  return rad * (180 / Math.PI);
+};
