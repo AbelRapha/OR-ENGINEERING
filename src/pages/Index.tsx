@@ -7,18 +7,23 @@ import { Terminal } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Progress } from "@/components/ui/progress";
 import { geocodeAddress, getRoutingMatrix, GeocodedAddress } from "@/services/routing";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CoordinateForm } from "@/components/CoordinateForm";
 
 const Index = () => {
   const [origins, setOrigins] = useState("");
   const [destinations, setDestinations] = useState("");
+  const [originCoords, setOriginCoords] = useState("");
+  const [destinationCoords, setDestinationCoords] = useState("");
   const [distUnit, setDistUnit] = useState("km");
   const [timeUnit, setTimeUnit] = useState("min");
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [statusMessage, setStatusMessage] = useState("");
   const [results, setResults] = useState<Results | null>(null);
+  const [activeTab, setActiveTab] = useState("address");
 
-  const handleCalculate = async () => {
+  const handleCalculateFromAddresses = async () => {
     const originLines = origins.split('\n').filter(line => line.trim() !== '');
     const destinationLines = destinations.split('\n').filter(line => line.trim() !== '');
 
@@ -32,7 +37,6 @@ const Index = () => {
     setProgress(0);
 
     try {
-      // Etapa 1: Geocodificação
       const totalAddresses = originLines.length + destinationLines.length;
       let geocodedCount = 0;
       
@@ -45,9 +49,9 @@ const Index = () => {
         }
         geocodedOrigins.push(result);
         geocodedCount++;
-        setProgress((geocodedCount / totalAddresses) * 70); // Geocodificação representa 70% do progresso
+        setProgress((geocodedCount / totalAddresses) * 70);
         setStatusMessage(`Geocodificando origens... (${i + 1}/${originLines.length})`);
-        await new Promise(resolve => setTimeout(resolve, 1100)); // Respeitar o limite de 1 req/s
+        await new Promise(resolve => setTimeout(resolve, 1100));
       }
 
       const geocodedDestinations: GeocodedAddress[] = [];
@@ -64,13 +68,11 @@ const Index = () => {
         await new Promise(resolve => setTimeout(resolve, 1100));
       }
 
-      // Etapa 2: Cálculo da Matriz
       setStatusMessage("Calculando matriz de rotas...");
       setProgress(75);
       const matrix = await getRoutingMatrix(geocodedOrigins, geocodedDestinations);
       setProgress(90);
 
-      // Etapa 3: Processamento dos Resultados
       setStatusMessage("Processando resultados...");
       const convertDistance = (d: number) => (distUnit === 'km' ? d / 1000 : d);
       const convertDuration = (d: number) => {
@@ -111,23 +113,125 @@ const Index = () => {
     }
   };
 
+  const parseCoordinates = (coordString: string, type: 'Origem' | 'Destino'): GeocodedAddress[] => {
+    const lines = coordString.split('\n').filter(line => line.trim() !== '');
+    return lines.map((line, index) => {
+      const parts = line.split(',').map(part => part.trim());
+      if (parts.length !== 2) {
+        throw new Error(`Formato inválido na linha ${index + 1} de ${type}: "${line}". Use o formato "latitude, longitude".`);
+      }
+      const lat = parseFloat(parts[0]);
+      const lon = parseFloat(parts[1]);
+  
+      if (isNaN(lat) || isNaN(lon)) {
+        throw new Error(`Coordenada inválida na linha ${index + 1} de ${type}: "${line}". Latitude e longitude devem ser números.`);
+      }
+      if (lat < -90 || lat > 90) {
+        throw new Error(`Latitude inválida na linha ${index + 1} de ${type}: ${lat}. O valor deve estar entre -90 e 90.`);
+      }
+      if (lon < -180 || lon > 180) {
+        throw new Error(`Longitude inválida na linha ${index + 1} de ${type}: ${lon}. O valor deve estar entre -180 e 180.`);
+      }
+  
+      return {
+        lat: lat.toString(),
+        lon: lon.toString(),
+        name: `${type} ${index + 1} (${lat.toFixed(4)}, ${lon.toFixed(4)})`,
+      };
+    });
+  };
+
+  const handleCalculateFromCoordinates = async () => {
+    if (originCoords.trim() === '' || destinationCoords.trim() === '') {
+      showError("Por favor, insira pelo menos uma coordenada de origem e uma de destino.");
+      return;
+    }
+  
+    setIsLoading(true);
+    setResults(null);
+    setProgress(0);
+    setStatusMessage("Preparando para o cálculo...");
+  
+    try {
+      setStatusMessage("Validando coordenadas...");
+      const geocodedOrigins = parseCoordinates(originCoords, 'Origem');
+      const geocodedDestinations = parseCoordinates(destinationCoords, 'Destino');
+      setProgress(25);
+  
+      setStatusMessage("Calculando matriz de rotas...");
+      const matrix = await getRoutingMatrix(geocodedOrigins, geocodedDestinations);
+      setProgress(75);
+  
+      setStatusMessage("Processando resultados...");
+      const convertDistance = (d: number) => (distUnit === 'km' ? d / 1000 : d);
+      const convertDuration = (d: number) => {
+        if (timeUnit === 'h') return d / 3600;
+        if (timeUnit === 'min') return d / 60;
+        return d;
+      };
+  
+      const finalResults: Results = {
+        distances: matrix.distances.map(row => row.map(convertDistance)),
+        durations: matrix.durations.map(row => row.map(convertDuration)),
+        originNames: geocodedOrigins.map(o => o.name),
+        destNames: geocodedDestinations.map(d => d.name),
+      };
+  
+      setResults(finalResults);
+      setProgress(100);
+      setStatusMessage("Concluído!");
+      showSuccess("Cálculo concluído com sucesso!");
+  
+    } catch (error: any) {
+      console.error("Calculation failed:", error);
+      showError(error.message || "Ocorreu um erro durante o cálculo. Verifique o console.");
+      setProgress(0);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
       <Header />
       <div className="container mx-auto p-4 md:p-8 -mt-20">
         <main className="space-y-8">
-          <AddressForm
-            origins={origins}
-            setOrigins={setOrigins}
-            destinations={destinations}
-            setDestinations={setDestinations}
-            distUnit={distUnit}
-            setDistUnit={setDistUnit}
-            timeUnit={timeUnit}
-            setTimeUnit={setTimeUnit}
-            onSubmit={handleCalculate}
-            isLoading={isLoading}
-          />
+          <Tabs defaultValue="address" onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="address">Por Endereço</TabsTrigger>
+              <TabsTrigger value="coordinates">Por Coordenadas</TabsTrigger>
+            </TabsList>
+            <TabsContent value="address">
+              <AddressForm
+                origins={origins}
+                setOrigins={setOrigins}
+                destinations={destinations}
+                setDestinations={setDestinations}
+                distUnit={distUnit}
+                setDistUnit={setDistUnit}
+                timeUnit={timeUnit}
+                setTimeUnit={setTimeUnit}
+                onSubmit={handleCalculateFromAddresses}
+                isLoading={isLoading}
+              />
+            </TabsContent>
+            <TabsContent value="coordinates">
+              <CoordinateForm
+                origins={originCoords}
+                setOrigins={setOriginCoords}
+                destinations={destinationCoords}
+                setDestinations={setDestinationCoords}
+                distUnit={distUnit}
+                setDistUnit={setDistUnit}
+                timeUnit={timeUnit}
+                setTimeUnit={setTimeUnit}
+                onSubmit={handleCalculateFromCoordinates}
+                isLoading={isLoading}
+              />
+            </TabsContent>
+          </Tabs>
 
           {isLoading && (
             <div className="space-y-3 rounded-lg bg-white p-6 shadow">
@@ -142,12 +246,22 @@ const Index = () => {
             <ResultsDisplay results={results} distUnit={distUnit} timeUnit={timeUnit} />
           )}
 
-          {!isLoading && (
+          {!isLoading && activeTab === 'address' && (
             <Alert>
               <Terminal className="h-4 w-4" />
               <AlertTitle>Como Funciona</AlertTitle>
               <AlertDescription>
                 Esta ferramenta utiliza a API Nominatim para converter endereços em coordenadas e a API OSRM para calcular as matrizes de distância e tempo de viagem. A precisão depende dos dados do OpenStreetMap.
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {!isLoading && activeTab === 'coordinates' && (
+            <Alert>
+              <Terminal className="h-4 w-4" />
+              <AlertTitle>Como Funciona</AlertTitle>
+              <AlertDescription>
+                As coordenadas devem ser inseridas no formato Latitude, Longitude (padrão WGS 84). A ferramenta utiliza a API OSRM para calcular as matrizes de distância e tempo de viagem com base nos pontos fornecidos. A precisão dos resultados depende dos dados do OpenStreetMap.
               </AlertDescription>
             </Alert>
           )}
