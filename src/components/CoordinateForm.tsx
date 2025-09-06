@@ -3,7 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, MapPin, Ruler, Clock } from "lucide-react";
+import { Loader2, MapPin, Ruler, Clock, Globe } from "lucide-react";
+import { CoordinateSystem } from "@/utils/coordinateConversion";
 
 interface CoordinateFormProps {
   originLats: string;
@@ -18,6 +19,8 @@ interface CoordinateFormProps {
   setDistUnit: (value: string) => void;
   timeUnit: string;
   setTimeUnit: (value: string) => void;
+  coordinateSystem: CoordinateSystem;
+  setCoordinateSystem: (value: CoordinateSystem) => void;
   onSubmit: () => void;
   isLoading: boolean;
 }
@@ -35,6 +38,8 @@ export const CoordinateForm = ({
   setDistUnit,
   timeUnit,
   setTimeUnit,
+  coordinateSystem,
+  setCoordinateSystem,
   onSubmit,
   isLoading,
 }: CoordinateFormProps) => {
@@ -43,10 +48,28 @@ export const CoordinateForm = ({
       <CardHeader>
         <CardTitle>Parâmetros de Roteirização por Coordenadas</CardTitle>
         <CardDescription>
-          Forneça as coordenadas de origem/destino e configure as unidades de medida.
+          Forneça as coordenadas, selecione o sistema de referência e configure as unidades.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="coord-system" className="flex items-center">
+            <Globe className="mr-2 h-4 w-4 text-muted-foreground" />
+            Sistema de Coordenadas (Datum)
+          </Label>
+          <Select value={coordinateSystem} onValueChange={(val) => setCoordinateSystem(val as CoordinateSystem)} disabled={isLoading}>
+            <SelectTrigger id="coord-system">
+              <SelectValue placeholder="Selecione o sistema" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="wgs84">WGS 84</SelectItem>
+              <SelectItem value="sirgas2000">SIRGAS 2000</SelectItem>
+              <SelectItem value="sad69">SAD 69</SelectItem>
+              <SelectItem value="corregoAlegre">Córrego Alegre</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <Label className="flex items-center">

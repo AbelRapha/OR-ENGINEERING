@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { geocodeAddress, getRoutingMatrix, GeocodedAddress } from "@/services/routing";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CoordinateForm } from "@/components/CoordinateForm";
+import { CoordinateSystem, convertToWGS84 } from "@/utils/coordinateConversion";
 
 const Index = () => {
   const [origins, setOrigins] = useState("");
@@ -19,6 +20,7 @@ const Index = () => {
   const [destinationLons, setDestinationLons] = useState("");
   const [distUnit, setDistUnit] = useState("km");
   const [timeUnit, setTimeUnit] = useState("min");
+  const [coordinateSystem, setCoordinateSystem] = useState<CoordinateSystem>("wgs84");
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [statusMessage, setStatusMessage] = useState("");
@@ -115,7 +117,7 @@ const Index = () => {
     }
   };
 
-  const parseCoordinateInputs = (latsStr: string, lonsStr: string, type: 'Origem' | 'Destino'): GeocodedAddress[] => {
+  const parseAndConvertCoordinates = (latsStr: string, lonsStr: string, type: 'Origem' | 'Destino'): GeocodedAddress[] => {
     const lats = latsStr.split('\n').filter(line => line.trim() !== '');
     const lons = lonsStr.split('\n').filter(line => line.trim() !== '');
 
@@ -138,9 +140,11 @@ const Index = () => {
         throw new Error(`Longitude inválida na linha ${index + 1} de ${type}: ${lon}. O valor deve estar entre -180 e 180.`);
       }
 
+      const [convertedLon, convertedLat] = convertToWGS84(lon, lat, coordinateSystem);
+
       return {
-        lat: lat.toString(),
-        lon: lon.toString(),
+        lat: convertedLat.toString(),
+        lon: convertedLon.toString(),
         name: `${type} ${index + 1} (${lat.toFixed(4)}, ${lon.toFixed(4)})`,
       };
     });
@@ -158,9 +162,9 @@ const Index = () => {
     setStatusMessage("Preparando para o cálculo...");
   
     try {
-      setStatusMessage("Validando coordenadas...");
-      const geocodedOrigins = parseCoordinateInputs(originLats, originLons, 'Origem');
-      const geocodedDestinations = parseCoordinateInputs(destinationLats, destinationLons, 'Destino');
+      setStatusMessage("Validando e convertendo coordenadas...");
+      const geocodedOrigins = parseAndConvertCoordinates(originLats, originLons, 'Origem');
+      const geocodedDestinations = parseAndConvertCoordinates(destinationLats, destinationLons, 'Destino');
       setProgress(25);
   
       setStatusMessage("Calculando matriz de rotas...");
@@ -236,6 +240,8 @@ const Index = () => {
                 setDistUnit={setDistUnit}
                 timeUnit={timeUnit}
                 setTimeUnit={setTimeUnit}
+                coordinateSystem={coordinateSystem}
+                setCoordinateSystem={setCoordinateSystem}
                 onSubmit={handleCalculateFromCoordinates}
                 isLoading={isLoading}
               />
@@ -270,7 +276,7 @@ const Index = () => {
               <Terminal className="h-4 w-4" />
               <AlertTitle>Como Funciona</AlertTitle>
               <AlertDescription>
-                As coordenadas devem ser inseridas no formato Latitude, Longitude (padrão WGS 84). A ferramenta utiliza a API OSRM para calcular as matrizes de distância e tempo de viagem com base nos pontos fornecidos. A precisão dos resultados depende dos dados do OpenStreetMap.
+                As coordenadas inseridas são convertidas para o sistema WGS 84 antes do cálculo. A ferramenta utiliza a API OSRM para calcular as matrizes de distância e tempo de viagem. A precisão dos resultados depende dos dados do OpenStreetMap.
               </AlertDescription>
             </Alert>
           )}
