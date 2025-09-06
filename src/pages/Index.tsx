@@ -261,7 +261,7 @@ const Index = () => {
               <AlertTitle>Como Funciona</AlertTitle>
               <AlertDescription>
                 Esta ferramenta utiliza a API Nominatim para converter endereços em coordenadas e a API OSRM para calcular as matrizes de distância e tempo de viagem. A precisão depende dos dados do OpenStreetMap.
-              </Aler<ctrl63>tDescription>
+              </AlertDescription>
             </Alert>
           )}
 
