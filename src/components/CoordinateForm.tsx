@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2, MapPin, Ruler, Clock, Globe, HelpCircle } from "lucide-react";
 import { CoordinateSystem } from "@/utils/coordinateConversion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface CoordinateFormProps {
   originLats: string;
@@ -22,6 +23,8 @@ interface CoordinateFormProps {
   setTimeUnit: (value: string) => void;
   coordinateSystem: CoordinateSystem;
   setCoordinateSystem: (value: CoordinateSystem) => void;
+  coordinateFormat: 'dd' | 'dms';
+  setCoordinateFormat: (value: 'dd' | 'dms') => void;
   onSubmit: () => void;
   isLoading: boolean;
 }
@@ -41,9 +44,14 @@ export const CoordinateForm = ({
   setTimeUnit,
   coordinateSystem,
   setCoordinateSystem,
+  coordinateFormat,
+  setCoordinateFormat,
   onSubmit,
   isLoading,
 }: CoordinateFormProps) => {
+  const latPlaceholder = coordinateFormat === 'dd' ? "-23.5505\n-22.9068" : "-23° 33' 1.8\"\n-22° 54' 24.48\"";
+  const lonPlaceholder = coordinateFormat === 'dd' ? "-46.6333\n-43.1729" : "-46° 38' 0.12\"\n-43° 10' 22.44\"";
+
   return (
     <Card>
       <CardHeader>
@@ -53,30 +61,54 @@ export const CoordinateForm = ({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="coord-system" className="flex items-center">
-            <Globe className="mr-2 h-4 w-4 text-muted-foreground" />
-            Sistema de Coordenadas (Datum)
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <HelpCircle className="ml-2 h-4 w-4 text-muted-foreground cursor-help" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>O que o Rafael e o Molina disseram na aula?</p>
-              </TooltipContent>
-            </Tooltip>
-          </Label>
-          <Select value={coordinateSystem} onValueChange={(val) => setCoordinateSystem(val as CoordinateSystem)} disabled={isLoading}>
-            <SelectTrigger id="coord-system">
-              <SelectValue placeholder="Selecione o sistema" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="wgs84">WGS 84</SelectItem>
-              <SelectItem value="sirgas2000">SIRGAS 2000</SelectItem>
-              <SelectItem value="sad69">SAD 69</SelectItem>
-              <SelectItem value="corregoAlegre">Córrego Alegre</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="coord-system" className="flex items-center">
+              <Globe className="mr-2 h-4 w-4 text-muted-foreground" />
+              Sistema de Coordenadas (Datum)
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="ml-2 h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>O que o Rafael e o Molina disseram na aula?</p>
+                </TooltipContent>
+              </Tooltip>
+            </Label>
+            <Select value={coordinateSystem} onValueChange={(val) => setCoordinateSystem(val as CoordinateSystem)} disabled={isLoading}>
+              <SelectTrigger id="coord-system">
+                <SelectValue placeholder="Selecione o sistema" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="wgs84">WGS 84</SelectItem>
+                <SelectItem value="sirgas2000">SIRGAS 2000</SelectItem>
+                <SelectItem value="sad69">SAD 69</SelectItem>
+                <SelectItem value="corregoAlegre">Córrego Alegre</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label className="flex items-center">
+              <Ruler className="mr-2 h-4 w-4 text-muted-foreground" />
+              Formato da Coordenada
+            </Label>
+            <RadioGroup
+              defaultValue="dd"
+              value={coordinateFormat}
+              onValueChange={(val) => setCoordinateFormat(val as 'dd' | 'dms')}
+              className="flex items-center space-x-4 pt-2"
+              disabled={isLoading}
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="dd" id="dd" />
+                <Label htmlFor="dd">Graus Decimais</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="dms" id="dms" />
+                <Label htmlFor="dms">Graus, Min, Seg</Label>
+              </div>
+            </RadioGroup>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -90,7 +122,7 @@ export const CoordinateForm = ({
                 <Label htmlFor="origins-lats" className="text-sm font-medium">Latitudes</Label>
                 <Textarea
                   id="origins-lats"
-                  placeholder="-23.5505&#10;-22.9068"
+                  placeholder={latPlaceholder}
                   value={originLats}
                   onChange={(e) => setOriginLats(e.target.value)}
                   rows={8}
@@ -101,7 +133,7 @@ export const CoordinateForm = ({
                 <Label htmlFor="origins-lons" className="text-sm font-medium">Longitudes</Label>
                 <Textarea
                   id="origins-lons"
-                  placeholder="-46.6333&#10;-43.1729"
+                  placeholder={lonPlaceholder}
                   value={originLons}
                   onChange={(e) => setOriginLons(e.target.value)}
                   rows={8}
@@ -120,7 +152,7 @@ export const CoordinateForm = ({
                 <Label htmlFor="destinations-lats" className="text-sm font-medium">Latitudes</Label>
                 <Textarea
                   id="destinations-lats"
-                  placeholder="-23.5614&#10;-22.9519"
+                  placeholder={latPlaceholder}
                   value={destinationLats}
                   onChange={(e) => setDestinationLats(e.target.value)}
                   rows={8}
@@ -131,7 +163,7 @@ export const CoordinateForm = ({
                 <Label htmlFor="destinations-lons" className="text-sm font-medium">Longitudes</Label>
                 <Textarea
                   id="destinations-lons"
-                  placeholder="-46.6564&#10;-43.2105"
+                  placeholder={lonPlaceholder}
                   value={destinationLons}
                   onChange={(e) => setDestinationLons(e.target.value)}
                   rows={8}

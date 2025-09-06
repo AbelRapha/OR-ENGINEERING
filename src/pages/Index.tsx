@@ -9,7 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { geocodeAddress, getRoutingMatrix, GeocodedAddress } from "@/services/routing";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CoordinateForm } from "@/components/CoordinateForm";
-import { CoordinateSystem, convertToWGS84 } from "@/utils/coordinateConversion";
+import { CoordinateSystem, convertToWGS84, dmsToDd } from "@/utils/coordinateConversion";
 
 const Index = () => {
   const [origins, setOrigins] = useState("");
@@ -21,6 +21,7 @@ const Index = () => {
   const [distUnit, setDistUnit] = useState("km");
   const [timeUnit, setTimeUnit] = useState("min");
   const [coordinateSystem, setCoordinateSystem] = useState<CoordinateSystem>("wgs84");
+  const [coordinateFormat, setCoordinateFormat] = useState<'dd' | 'dms'>('dd');
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [statusMessage, setStatusMessage] = useState("");
@@ -127,17 +128,29 @@ const Index = () => {
 
     return lats.map((latStr, index) => {
       const lonStr = lons[index];
-      const lat = parseFloat(latStr.replace(',', '.').trim());
-      const lon = parseFloat(lonStr.replace(',', '.').trim());
+      let lat: number;
+      let lon: number;
+
+      try {
+        if (coordinateFormat === 'dms') {
+          lat = dmsToDd(latStr);
+          lon = dmsToDd(lonStr);
+        } else {
+          lat = parseFloat(latStr.replace(',', '.').trim());
+          lon = parseFloat(lonStr.replace(',', '.').trim());
+        }
+      } catch (e: any) {
+        throw new Error(`Erro ao processar coordenada na linha ${index + 1} de ${type}: ${e.message}`);
+      }
 
       if (isNaN(lat) || isNaN(lon)) {
-        throw new Error(`Coordenada inválida na linha ${index + 1} de ${type}: (lat: "${latStr}", lon: "${lonStr}"). Latitude e longitude devem ser números.`);
+        throw new Error(`Coordenada inválida na linha ${index + 1} de ${type}: (lat: "${latStr}", lon: "${lonStr}"). A coordenada deve ser um número válido.`);
       }
       if (lat < -90 || lat > 90) {
-        throw new Error(`Latitude inválida na linha ${index + 1} de ${type}: ${lat}. O valor deve estar entre -90 e 90.`);
+        throw new Error(`Latitude inválida na linha ${index + 1} de ${type}: ${lat.toFixed(6)}. O valor deve estar entre -90 e 90.`);
       }
       if (lon < -180 || lon > 180) {
-        throw new Error(`Longitude inválida na linha ${index + 1} de ${type}: ${lon}. O valor deve estar entre -180 e 180.`);
+        throw new Error(`Longitude inválida na linha ${index + 1} de ${type}: ${lon.toFixed(6)}. O valor deve estar entre -180 e 180.`);
       }
 
       const [convertedLon, convertedLat] = convertToWGS84(lon, lat, coordinateSystem);
@@ -242,6 +255,8 @@ const Index = () => {
                 setTimeUnit={setTimeUnit}
                 coordinateSystem={coordinateSystem}
                 setCoordinateSystem={setCoordinateSystem}
+                coordinateFormat={coordinateFormat}
+                setCoordinateFormat={setCoordinateFormat}
                 onSubmit={handleCalculateFromCoordinates}
                 isLoading={isLoading}
               />

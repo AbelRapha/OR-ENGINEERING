@@ -31,3 +31,37 @@ export const convertToWGS84 = (lon: number, lat: number, fromSystem: CoordinateS
 
   return [convertedPoint[0], convertedPoint[1]];
 };
+
+/**
+ * Converte uma string de Graus, Minutos, Segundos (DMS) para Graus Decimais (DD).
+ * @param dms A string DMS, ex: "23° 40' 50\"" ou "-23 40 50.5".
+ * @returns O valor em graus decimais.
+ * @throws Lança um erro se o formato da string for inválido.
+ */
+export const dmsToDd = (dms: string): number => {
+  const dmsString = dms.trim();
+  // Regex para capturar graus, minutos e segundos com vários separadores.
+  const regex = /(-?)(\d{1,3})[°\s]+(\d{1,2})['\s]+([\d.]+)\"?/i;
+  const parts = dmsString.match(regex);
+
+  if (!parts) {
+    throw new Error(`Formato de coordenada DMS inválido: "${dms}"`);
+  }
+
+  const sign = parts[1] === '-' ? -1 : 1;
+  const degrees = parseFloat(parts[2]);
+  const minutes = parseFloat(parts[3]);
+  const seconds = parseFloat(parts[4]);
+
+  if (isNaN(degrees) || isNaN(minutes) || isNaN(seconds)) {
+    throw new Error(`Componente de coordenada DMS inválido: "${dms}"`);
+  }
+  
+  if (minutes >= 60 || seconds >= 60) {
+    throw new Error(`Minutos ou segundos inválidos em DMS: "${dms}". Devem ser menores que 60.`);
+  }
+
+  const dd = degrees + minutes / 60 + seconds / 3600;
+
+  return sign * dd;
+};
