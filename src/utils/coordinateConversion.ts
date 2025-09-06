@@ -40,8 +40,8 @@ export const convertToWGS84 = (lon: number, lat: number, fromSystem: CoordinateS
  */
 export const dmsToDd = (dms: string): number => {
   const dmsString = dms.trim();
-  // Regex para capturar graus, minutos e segundos com vários separadores.
-  const regex = /(-?)(\d{1,3})[°\s]+(\d{1,2})['\s]+([\d.]+)\"?/i;
+  // Regex para capturar graus, minutos e segundos com vários separadores e símbolos.
+  const regex = /(-?)(\d{1,3})[°º\s]+(\d{1,2})['’\s]+([\d.]+)[\"”]?\s*$/i;
   const parts = dmsString.match(regex);
 
   if (!parts) {
