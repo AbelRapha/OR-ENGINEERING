@@ -274,9 +274,17 @@ const Index = () => {
           {!isLoading && activeTab === 'coordinates' && (
             <Alert>
               <Terminal className="h-4 w-4" />
-              <AlertTitle>Como Funciona</AlertTitle>
-              <AlertDescription>
-                As coordenadas inseridas são convertidas para o sistema WGS 84 antes do cálculo. A ferramenta utiliza a API OSRM para calcular as matrizes de distância e tempo de viagem. A precisão dos resultados depende dos dados do OpenStreetMap.
+              <AlertTitle>A Importância de Escolher o Datum Correto</AlertTitle>
+              <AlertDescription className="space-y-2">
+                <p>
+                  <strong>1. O que é um Datum?</strong> Um Datum (como WGS 84, SIRGAS 2000, etc.) é um sistema de referência que define a posição e a orientação de um sistema de coordenadas. Coordenadas idênticas em datums diferentes podem apontar para locais fisicamente distintos no globo, com diferenças que podem chegar a dezenas de metros.
+                </p>
+                <p>
+                  <strong>2. Conversão para WGS 84:</strong> As APIs de roteamento, como a OSRM usada aqui, operam com o padrão global WGS 84. Esta ferramenta converte automaticamente as coordenadas do datum que você selecionou para WGS 84 antes de calcular a rota.
+                </p>
+                <p>
+                  <strong>3. Por que a escolha correta é crucial?</strong> Selecionar o datum de origem correto é fundamental para a precisão. Se você inserir coordenadas em SIRGAS 2000 mas deixar a seleção em "WGS 84", a conversão não será feita corretamente. Isso fará com que a localização enviada para a API esteja deslocada, resultando em cálculos de distância e tempo imprecisos, pois a rota será traçada a partir de um ponto de partida ou chegada errado.
+                </p>
               </AlertDescription>
             </Alert>
           )}
