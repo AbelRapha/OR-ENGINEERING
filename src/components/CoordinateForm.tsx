@@ -3,8 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, MapPin, Ruler, Clock, Globe } from "lucide-react";
+import { Loader2, MapPin, Ruler, Clock, Globe, HelpCircle } from "lucide-react";
 import { CoordinateSystem } from "@/utils/coordinateConversion";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface CoordinateFormProps {
   originLats: string;
@@ -56,6 +57,14 @@ export const CoordinateForm = ({
           <Label htmlFor="coord-system" className="flex items-center">
             <Globe className="mr-2 h-4 w-4 text-muted-foreground" />
             Sistema de Coordenadas (Datum)
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <HelpCircle className="ml-2 h-4 w-4 text-muted-foreground cursor-help" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>O que o Rafael e o Molina disseram na aula?</p>
+              </TooltipContent>
+            </Tooltip>
           </Label>
           <Select value={coordinateSystem} onValueChange={(val) => setCoordinateSystem(val as CoordinateSystem)} disabled={isLoading}>
             <SelectTrigger id="coord-system">
