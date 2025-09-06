@@ -13,8 +13,10 @@ import { CoordinateForm } from "@/components/CoordinateForm";
 const Index = () => {
   const [origins, setOrigins] = useState("");
   const [destinations, setDestinations] = useState("");
-  const [originCoords, setOriginCoords] = useState("");
-  const [destinationCoords, setDestinationCoords] = useState("");
+  const [originLats, setOriginLats] = useState("");
+  const [originLons, setOriginLons] = useState("");
+  const [destinationLats, setDestinationLats] = useState("");
+  const [destinationLons, setDestinationLons] = useState("");
   const [distUnit, setDistUnit] = useState("km");
   const [timeUnit, setTimeUnit] = useState("min");
   const [isLoading, setIsLoading] = useState(false);
@@ -113,18 +115,21 @@ const Index = () => {
     }
   };
 
-  const parseCoordinates = (coordString: string, type: 'Origem' | 'Destino'): GeocodedAddress[] => {
-    const lines = coordString.split('\n').filter(line => line.trim() !== '');
-    return lines.map((line, index) => {
-      const parts = line.split(',').map(part => part.trim());
-      if (parts.length !== 2) {
-        throw new Error(`Formato inválido na linha ${index + 1} de ${type}: "${line}". Use o formato "latitude, longitude".`);
-      }
-      const lat = parseFloat(parts[0]);
-      const lon = parseFloat(parts[1]);
-  
+  const parseCoordinateInputs = (latsStr: string, lonsStr: string, type: 'Origem' | 'Destino'): GeocodedAddress[] => {
+    const lats = latsStr.split('\n').filter(line => line.trim() !== '');
+    const lons = lonsStr.split('\n').filter(line => line.trim() !== '');
+
+    if (lats.length !== lons.length) {
+      throw new Error(`O número de latitudes (${lats.length}) e longitudes (${lons.length}) para ${type} não é o mesmo.`);
+    }
+
+    return lats.map((latStr, index) => {
+      const lonStr = lons[index];
+      const lat = parseFloat(latStr.replace(',', '.').trim());
+      const lon = parseFloat(lonStr.replace(',', '.').trim());
+
       if (isNaN(lat) || isNaN(lon)) {
-        throw new Error(`Coordenada inválida na linha ${index + 1} de ${type}: "${line}". Latitude e longitude devem ser números.`);
+        throw new Error(`Coordenada inválida na linha ${index + 1} de ${type}: (lat: "${latStr}", lon: "${lonStr}"). Latitude e longitude devem ser números.`);
       }
       if (lat < -90 || lat > 90) {
         throw new Error(`Latitude inválida na linha ${index + 1} de ${type}: ${lat}. O valor deve estar entre -90 e 90.`);
@@ -132,7 +137,7 @@ const Index = () => {
       if (lon < -180 || lon > 180) {
         throw new Error(`Longitude inválida na linha ${index + 1} de ${type}: ${lon}. O valor deve estar entre -180 e 180.`);
       }
-  
+
       return {
         lat: lat.toString(),
         lon: lon.toString(),
@@ -142,8 +147,8 @@ const Index = () => {
   };
 
   const handleCalculateFromCoordinates = async () => {
-    if (originCoords.trim() === '' || destinationCoords.trim() === '') {
-      showError("Por favor, insira pelo menos uma coordenada de origem e uma de destino.");
+    if (originLats.trim() === '' || originLons.trim() === '' || destinationLats.trim() === '' || destinationLons.trim() === '') {
+      showError("Por favor, preencha todos os campos de coordenadas de origem e destino.");
       return;
     }
   
@@ -154,8 +159,8 @@ const Index = () => {
   
     try {
       setStatusMessage("Validando coordenadas...");
-      const geocodedOrigins = parseCoordinates(originCoords, 'Origem');
-      const geocodedDestinations = parseCoordinates(destinationCoords, 'Destino');
+      const geocodedOrigins = parseCoordinateInputs(originLats, originLons, 'Origem');
+      const geocodedDestinations = parseCoordinateInputs(destinationLats, destinationLons, 'Destino');
       setProgress(25);
   
       setStatusMessage("Calculando matriz de rotas...");
@@ -219,10 +224,14 @@ const Index = () => {
             </TabsContent>
             <TabsContent value="coordinates">
               <CoordinateForm
-                origins={originCoords}
-                setOrigins={setOriginCoords}
-                destinations={destinationCoords}
-                setDestinations={setDestinationCoords}
+                originLats={originLats}
+                setOriginLats={setOriginLats}
+                originLons={originLons}
+                setOriginLons={setOriginLons}
+                destinationLats={destinationLats}
+                setDestinationLats={setDestinationLats}
+                destinationLons={destinationLons}
+                setDestinationLons={setDestinationLons}
                 distUnit={distUnit}
                 setDistUnit={setDistUnit}
                 timeUnit={timeUnit}
@@ -252,7 +261,7 @@ const Index = () => {
               <AlertTitle>Como Funciona</AlertTitle>
               <AlertDescription>
                 Esta ferramenta utiliza a API Nominatim para converter endereços em coordenadas e a API OSRM para calcular as matrizes de distância e tempo de viagem. A precisão depende dos dados do OpenStreetMap.
-              </AlertDescription>
+              </Aler<ctrl63>tDescription>
             </Alert>
           )}
 

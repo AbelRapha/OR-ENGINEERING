@@ -6,10 +6,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2, MapPin, Ruler, Clock } from "lucide-react";
 
 interface CoordinateFormProps {
-  origins: string;
-  setOrigins: (value: string) => void;
-  destinations: string;
-  setDestinations: (value: string) => void;
+  originLats: string;
+  setOriginLats: (value: string) => void;
+  originLons: string;
+  setOriginLons: (value: string) => void;
+  destinationLats: string;
+  setDestinationLats: (value: string) => void;
+  destinationLons: string;
+  setDestinationLons: (value: string) => void;
   distUnit: string;
   setDistUnit: (value: string) => void;
   timeUnit: string;
@@ -19,10 +23,14 @@ interface CoordinateFormProps {
 }
 
 export const CoordinateForm = ({
-  origins,
-  setOrigins,
-  destinations,
-  setDestinations,
+  originLats,
+  setOriginLats,
+  originLons,
+  setOriginLons,
+  destinationLats,
+  setDestinationLats,
+  destinationLons,
+  setDestinationLons,
   distUnit,
   setDistUnit,
   timeUnit,
@@ -40,39 +48,65 @@ export const CoordinateForm = ({
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label htmlFor="origins-coords" className="flex items-center">
+          <div className="space-y-4">
+            <Label className="flex items-center">
               <MapPin className="mr-2 h-4 w-4 text-muted-foreground" />
               Coordenadas de Origem
             </Label>
-            <p className="text-xs text-muted-foreground">
-              Ex: -23.5505, -46.6333
-            </p>
-            <Textarea
-              id="origins-coords"
-              placeholder="Insira um par de coordenadas (lat, lon) por linha..."
-              value={origins}
-              onChange={(e) => setOrigins(e.target.value)}
-              rows={8}
-              disabled={isLoading}
-            />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="origins-lats" className="text-sm font-medium">Latitudes</Label>
+                <Textarea
+                  id="origins-lats"
+                  placeholder="-23.5505&#10;-22.9068"
+                  value={originLats}
+                  onChange={(e) => setOriginLats(e.target.value)}
+                  rows={8}
+                  disabled={isLoading}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="origins-lons" className="text-sm font-medium">Longitudes</Label>
+                <Textarea
+                  id="origins-lons"
+                  placeholder="-46.6333&#10;-43.1729"
+                  value={originLons}
+                  onChange={(e) => setOriginLons(e.target.value)}
+                  rows={8}
+                  disabled={isLoading}
+                />
+              </div>
+            </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="destinations-coords" className="flex items-center">
+          <div className="space-y-4">
+            <Label className="flex items-center">
               <MapPin className="mr-2 h-4 w-4 text-muted-foreground" />
               Coordenadas de Destino
             </Label>
-            <p className="text-xs text-muted-foreground">
-              Ex: -22.9068, -43.1729
-            </p>
-            <Textarea
-              id="destinations-coords"
-              placeholder="Insira um par de coordenadas (lat, lon) por linha..."
-              value={destinations}
-              onChange={(e) => setDestinations(e.target.value)}
-              rows={8}
-              disabled={isLoading}
-            />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="destinations-lats" className="text-sm font-medium">Latitudes</Label>
+                <Textarea
+                  id="destinations-lats"
+                  placeholder="-23.5614&#10;-22.9519"
+                  value={destinationLats}
+                  onChange={(e) => setDestinationLats(e.target.value)}
+                  rows={8}
+                  disabled={isLoading}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="destinations-lons" className="text-sm font-medium">Longitudes</Label>
+                <Textarea
+                  id="destinations-lons"
+                  placeholder="-46.6564&#10;-43.2105"
+                  value={destinationLons}
+                  onChange={(e) => setDestinationLons(e.target.value)}
+                  rows={8}
+                  disabled={isLoading}
+                />
+              </div>
+            </div>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
