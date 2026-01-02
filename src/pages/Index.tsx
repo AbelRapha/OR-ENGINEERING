@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AddressForm } from "@/components/AddressForm";
 import { ResultsDisplay, Results } from "@/components/ResultsDisplay";
 import { showError, showSuccess } from "@/utils/toast";
@@ -11,6 +11,7 @@ import { geocodeAddress, getRoutingMatrix, GeocodedAddress } from "@/services/ro
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CoordinateForm } from "@/components/CoordinateForm";
 import { CoordinateSystem, convertToWGS84, dmsToDd, radToDd } from "@/utils/coordinateConversion";
+import { useLocation } from "react-router-dom";
 
 const Index = () => {
   const [origins, setOrigins] = useState("");
@@ -27,6 +28,22 @@ const Index = () => {
   const [progress, setProgress] = useState(0);
   const [statusMessage, setStatusMessage] = useState("");
   const [results, setResults] = useState<Results | null>(null);
+  
+  const location = useLocation();
+
+  // Efeito para rolar para a seção quando o hash da URL muda
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        // Adiciona um pequeno atraso para garantir que a Navbar fixa não cubra o topo da seção
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [location.hash]);
 
   const handleCalculateFromAddresses = async () => {
     const originLines = origins.split('\n').filter(line => line.trim() !== '');
@@ -103,24 +120,53 @@ const Index = () => {
       const parseCoords = (lats: string, lons: string) => {
         const la = lats.split('\n').filter(l => l.trim());
         const lo = lons.split('\n').filter(l => l.trim());
+        if (la.length !== lo.length) {
+          throw new Error("O número de Latitudes e Longitudes deve ser o mesmo.");
+        }
         return la.map((latStr, i) => {
-          let latVal = coordinateFormat === 'dms' ? dmsToDd(latStr) : coordinateFormat === 'rad' ? radToDd(parseFloat(latStr)) : parseFloat(latStr);
-          let lonVal = coordinateFormat === 'dms' ? dmsToDd(lo[i]) : coordinateFormat === 'rad' ? radToDd(parseFloat(lo[i])) : parseFloat(lo[i]);
+          let latVal: number;
+          let lonVal: number;
+          
+          try {
+            latVal = coordinateFormat === 'dms' ? dmsToDd(latStr) : coordinateFormat === 'rad' ? radToDd(parseFloat(latStr)) : parseFloat(latStr);
+            lonVal = coordinateFormat === 'dms' ? dmsToDd(lo[i]) : coordinateFormat === 'rad' ? radToDd(parseFloat(lo[i])) : parseFloat(lo[i]);
+          } catch (e) {
+            throw new Error(`Erro ao processar coordenada na linha ${i + 1}: ${e instanceof Error ? e.message : "Formato inválido."}`);
+          }
+
           const [convLon, convLat] = convertToWGS84(lonVal, latVal, coordinateSystem);
           return { lat: convLat.toString(), lon: convLon.toString(), name: `Ponto ${i + 1}` };
         });
       };
+      
       const o = parseCoords(originLats, originLons);
       const d = parseCoords(destinationLats, destinationLons);
+      
+      if (o.length === 0 || d.length === 0) {
+        showError("Nenhuma coordenada válida encontrada.");
+        return;
+      }
+
+      setStatusMessage("Calculando caminhos na rede...");
+      setProgress(75);
       const matrix = await getRoutingMatrix(o, d);
-      setResults({
+      
+      const finalResults: Results = {
         distances: matrix.distances.map(row => row.map(d => distUnit === 'km' ? d / 1000 : d)),
         durations: matrix.durations.map(row => row.map(d => timeUnit === 'h' ? d / 3600 : timeUnit === 'min' ? d / 60 : d)),
         originNames: o.map(x => x.name),
         destNames: d.map(x => x.name),
-      });
+      };
+
+      setResults(finalResults);
+      setProgress(100);
       showSuccess("Cálculo realizado com sucesso.");
-    } catch (e: any) { showError(e.message); } finally { setIsLoading(false); }
+    } catch (e: any) { 
+      showError("Erro de Coordenada", e.message); 
+      setProgress(0);
+    } finally { 
+      setTimeout(() => setIsLoading(false), 500); 
+    }
   };
 
   return (

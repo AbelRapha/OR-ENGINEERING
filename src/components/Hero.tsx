@@ -1,5 +1,6 @@
 import { Button } from "./ui/button";
 import heroImage from "@/images/green_shipping_containers_industrial_hero.png";
+import { Link } from "react-router-dom";
 
 export const Hero = () => {
   return (
@@ -27,9 +28,11 @@ export const Hero = () => {
             <Button size="lg" className="bg-white text-primary hover:bg-accent text-xs uppercase tracking-widest px-10 h-14" onClick={() => document.getElementById('engine')?.scrollIntoView({ behavior: 'smooth' })}>
               Iniciar Motor OR
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-primary hover:bg-white/10 text-xs uppercase tracking-widest px-10 h-14">
-              Documentação
-            </Button>
+            <Link to="/documentation">
+              <Button size="lg" variant="outline" className="border-white text-primary hover:bg-white/10 text-xs uppercase tracking-widest px-10 h-14">
+                Documentação
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
