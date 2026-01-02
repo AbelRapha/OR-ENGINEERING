@@ -1,8 +1,6 @@
 import routeOptimizationImage from "@/images/abstract_route_optimization_nodes.png";
 import flowChartImage from "@/images/operations_research_flow_chart.png";
 import warehouseAutomationImage from "@/images/warehouse_automation.png";
-import ftLogo from "@/images/logo-ft-principal-horizontal.png";
-import transportEngLogo from "@/images/logo-curso-engenharia-transportes.jpg";
 
 export const Features = () => {
   const features = [
@@ -47,42 +45,6 @@ export const Features = () => {
               </p>
             </div>
           ))}
-        </div>
-        
-        {/* Novo Bloco: Iniciativa Acadêmica */}
-        <div className="mt-20 pt-10 border-t border-border">
-          <h3 className="text-3xl font-display font-bold tracking-tighter mb-6 uppercase text-primary">
-            Iniciativa Acadêmica UNICAMP
-          </h3>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center bg-muted/50 p-8 border border-border">
-            <div className="lg:col-span-2 space-y-4">
-              <p className="text-foreground text-sm leading-relaxed font-medium">
-                Este projeto é uma iniciativa de pesquisa e desenvolvimento em Pesquisa Operacional e Engenharia de Transportes, desenvolvido pelo estudante **Abel Rapha** da Universidade Estadual de Campinas (UNICAMP).
-              </p>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                O trabalho é orientado pelos professores:
-                <ul className="list-disc list-inside ml-4 mt-2 space-y-1">
-                  <li>**Dr. Vitor Eduardo Molina**</li>
-                  <li>**Dr. William Machado Emiliano**</li>
-                </ul>
-              </p>
-              <p className="text-muted-foreground text-xs leading-relaxed italic pt-2">
-                A ferramenta visa aplicar conceitos teóricos de otimização de redes e logística para fornecer soluções práticas e acessíveis à comunidade de engenharia e planejamento.
-              </p>
-            </div>
-            <div className="lg:col-span-1 flex flex-col items-center justify-center space-y-6 p-4">
-              <img 
-                src={ftLogo} 
-                alt="Logo da Faculdade de Tecnologia (FT)" 
-                className="max-h-16 w-auto object-contain"
-              />
-              <img 
-                src={transportEngLogo} 
-                alt="Logo do Curso de Engenharia de Transportes" 
-                className="max-h-20 w-auto object-contain"
-              />
-            </div>
-          </div>
         </div>
       </div>
     </section>
