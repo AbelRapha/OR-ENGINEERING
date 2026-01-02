@@ -1,4 +1,5 @@
 import { Truck } from "lucide-react";
+import { Linkedin } from "lucide-react";
 
 export const Footer = () => {
   return (
@@ -20,8 +21,17 @@ export const Footer = () => {
           <div>
             <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold mb-6">Contato</h4>
             <ul className="text-sm space-y-2 text-white/60">
-              <li>suporte@orengineering.com</li>
-              <li>+55 11 9999-9999</li>
+              <li>
+                <a 
+                  href="https://www.linkedin.com/in/abel-rapha-data-science/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center hover:text-white transition-colors"
+                >
+                  <Linkedin className="h-4 w-4 mr-2" />
+                  Abel Rapha (LinkedIn)
+                </a>
+              </li>
             </ul>
           </div>
           <div>
