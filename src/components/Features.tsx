@@ -1,8 +1,6 @@
 import routeOptimizationImage from "@/images/abstract_route_optimization_nodes.png";
 import flowChartImage from "@/images/operations_research_flow_chart.png";
 import warehouseAutomationImage from "@/images/warehouse_automation.png";
-import ftLogo from "@/images/ft_logo.png";
-import transportLogo from "@/images/transport_logo.png";
 
 export const Features = () => {
   const features = [
@@ -74,11 +72,11 @@ export const Features = () => {
               </div>
             </div>
             <div className="flex flex-col items-center gap-6">
-              <div className="bg-muted p-6 rounded-sm flex items-center justify-center">
-                <img src={ftLogo} alt="Logo da Faculdade de Tecnologia - UNICAMP" className="h-16" />
+              <div className="bg-muted p-6 rounded-sm flex items-center justify-center w-48 h-24">
+                <span className="text-muted-foreground text-sm">Logo FT UNICAMP</span>
               </div>
-              <div className="bg-muted p-6 rounded-sm flex items-center justify-center">
-                <img src={transportLogo} alt="Logo do Curso de Engenharia de Transportes" className="h-16" />
+              <div className="bg-muted p-6 rounded-sm flex items-center justify-center w-48 h-24">
+                <span className="text-muted-foreground text-sm">Logo Eng. Transportes</span>
               </div>
             </div>
           </div>
