@@ -8,7 +8,7 @@ interface MarkdownRendererProps {
 
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
   const rawMarkup = React.useMemo(() => {
-    const html = marked.parse(content);
+    const html = marked.parse(content) as string;
     return DOMPurify.sanitize(html);
   }, [content]);
 
