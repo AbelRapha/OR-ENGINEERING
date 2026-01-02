@@ -16,7 +16,7 @@ export const Features = () => {
     },
     {
       name: "Automação Logística",
-      description: "Integração perfeita com ambientes logísticos automatizados e rastreamento de inventário em tempo real.",
+      description: "A matriz permite otimizar a logística com os dados de origem e destino para selecionar os melhores locais para uma determinada finalidade.",
       image: warehouseAutomationImage
     }
   ];
