@@ -1,19 +1,23 @@
+import routeOptimizationImage from "@/images/abstract_route_optimization_nodes.png";
+import flowChartImage from "@/images/operations_research_flow_chart.png";
+import warehouseAutomationImage from "@/images/warehouse_automation.png";
+
 export const Features = () => {
   const features = [
     {
       name: "Motor de Matriz O-D",
       description: "Calcula a distância e o tempo do caminho mais curto entre múltiplos nós da rede usando simulações baseadas em Dijkstra.",
-      image: "/images/abstract_route_optimization_nodes.png"
+      image: routeOptimizationImage
     },
     {
       name: "Programação Linear",
       description: "Abordagem matemática para fluxo de rede e otimização da cadeia de suprimentos usando heurísticas avançadas.",
-      image: "/images/operations_research_flow_chart.png"
+      image: flowChartImage
     },
     {
       name: "Automação Logística",
       description: "Integração perfeita com ambientes logísticos automatizados e rastreamento de inventário em tempo real.",
-      image: "/images/warehouse_automation.png"
+      image: warehouseAutomationImage
     }
   ];
 

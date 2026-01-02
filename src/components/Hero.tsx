@@ -1,11 +1,12 @@
 import { Button } from "./ui/button";
+import heroImage from "@/images/green_shipping_containers_industrial_hero.png";
 
 export const Hero = () => {
   return (
     <section className="relative min-h-[90vh] flex items-center pt-20 overflow-hidden bg-[#2D3F33] text-white">
       <div className="absolute inset-0 opacity-40">
         <img 
-          src="/images/green_shipping_containers_industrial_hero.png" 
+          src={heroImage} 
           alt="Industrial Hero" 
           className="w-full h-full object-cover grayscale brightness-50"
         />
