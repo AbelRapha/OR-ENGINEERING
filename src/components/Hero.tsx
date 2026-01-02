@@ -5,7 +5,7 @@ export const Hero = () => {
     <section className="relative min-h-[90vh] flex items-center pt-20 overflow-hidden bg-[#2D3F33] text-white">
       <div className="absolute inset-0 opacity-40">
         <img 
-          src="/green_shipping_containers_industrial_hero.png" 
+          src="/images/green_shipping_containers_industrial_hero.png" 
           alt="Industrial Hero" 
           className="w-full h-full object-cover grayscale brightness-50"
         />

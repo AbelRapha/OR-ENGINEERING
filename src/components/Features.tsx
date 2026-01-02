@@ -3,17 +3,17 @@ export const Features = () => {
     {
       name: "Motor de Matriz O-D",
       description: "Calcula a distância e o tempo do caminho mais curto entre múltiplos nós da rede usando simulações baseadas em Dijkstra.",
-      image: "/abstract_route_optimization_nodes.png"
+      image: "/images/abstract_route_optimization_nodes.png"
     },
     {
       name: "Programação Linear",
       description: "Abordagem matemática para fluxo de rede e otimização da cadeia de suprimentos usando heurísticas avançadas.",
-      image: "/operations_research_flow_chart.png"
+      image: "/images/operations_research_flow_chart.png"
     },
     {
       name: "Automação Logística",
       description: "Integração perfeita com ambientes logísticos automatizados e rastreamento de inventário em tempo real.",
-      image: "/warehouse_automation.png"
+      image: "/images/warehouse_automation.png"
     }
   ];
 
