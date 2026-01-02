@@ -31,88 +31,84 @@ export const AddressForm = ({
   isLoading,
 }: AddressFormProps) => {
   return (
-    <Card>
+    <Card className="border border-border shadow-none bg-white">
       <CardHeader>
-        <CardTitle>Parâmetros de Roteirização</CardTitle>
-        <CardDescription>
-          Forneça os endereços de origem/destino e configure as unidades de medida.
+        <CardTitle className="text-lg uppercase tracking-tight">Parâmetros de Roteirização</CardTitle>
+        <CardDescription className="text-xs uppercase tracking-wider">
+          Insira os endereços e configure as unidades de medida para o cálculo.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <Label htmlFor="origins" className="flex items-center">
-              <MapPin className="mr-2 h-4 w-4 text-muted-foreground" />
+            <Label htmlFor="origins" className="flex items-center text-[10px] uppercase font-bold tracking-widest">
+              <MapPin className="mr-2 h-3 w-3 text-primary" />
               Endereços de Origem
             </Label>
-            <p className="text-xs text-muted-foreground">
-              Ex: Av. Paulista, 1578, São Paulo, SP
-            </p>
             <Textarea
               id="origins"
-              placeholder="Insira um endereço por linha..."
+              placeholder="Ex: Av. Paulista, 1578, São Paulo, SP&#10;Um endereço por linha..."
               value={origins}
               onChange={(e) => setOrigins(e.target.value)}
-              rows={8}
+              rows={6}
+              className="text-xs font-mono border-border focus:ring-primary"
               disabled={isLoading}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="destinations" className="flex items-center">
-              <MapPin className="mr-2 h-4 w-4 text-muted-foreground" />
+            <Label htmlFor="destinations" className="flex items-center text-[10px] uppercase font-bold tracking-widest">
+              <MapPin className="mr-2 h-3 w-3 text-primary" />
               Endereços de Destino
             </Label>
-            <p className="text-xs text-muted-foreground">
-              Ex: Praça da Sé, s/n, São Paulo, SP
-            </p>
             <Textarea
               id="destinations"
-              placeholder="Insira um endereço por linha..."
+              placeholder="Ex: Praça da Sé, s/n, São Paulo, SP&#10;Um endereço por linha..."
               value={destinations}
               onChange={(e) => setDestinations(e.target.value)}
-              rows={8}
+              rows={6}
+              className="text-xs font-mono border-border focus:ring-primary"
               disabled={isLoading}
             />
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <Label htmlFor="dist-unit" className="flex items-center">
-              <Ruler className="mr-2 h-4 w-4 text-muted-foreground" />
-              Unidade de Medida (Distância)
+            <Label htmlFor="dist-unit" className="flex items-center text-[10px] uppercase font-bold tracking-widest">
+              <Ruler className="mr-2 h-3 w-3 text-primary" />
+              Unidade de Distância
             </Label>
             <Select value={distUnit} onValueChange={setDistUnit} disabled={isLoading}>
-              <SelectTrigger id="dist-unit">
-                <SelectValue placeholder="Selecione a unidade" />
+              <SelectTrigger id="dist-unit" className="text-xs uppercase tracking-widest">
+                <SelectValue placeholder="Selecione" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="km">Quilômetros (km)</SelectItem>
-                <SelectItem value="m">Metros (m)</SelectItem>
+                <SelectItem value="km" className="text-xs uppercase">Quilômetros (km)</SelectItem>
+                <SelectItem value="m" className="text-xs uppercase">Metros (m)</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="time-unit" className="flex items-center">
-              <Clock className="mr-2 h-4 w-4 text-muted-foreground" />
-              Unidade de Medida (Tempo)
+            <Label htmlFor="time-unit" className="flex items-center text-[10px] uppercase font-bold tracking-widest">
+              <Clock className="mr-2 h-3 w-3 text-primary" />
+              Unidade de Tempo
             </Label>
             <Select value={timeUnit} onValueChange={setTimeUnit} disabled={isLoading}>
-              <SelectTrigger id="time-unit">
-                <SelectValue placeholder="Selecione a unidade" />
+              <SelectTrigger id="time-unit" className="text-xs uppercase tracking-widest">
+                <SelectValue placeholder="Selecione" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="h">Horas (h)</SelectItem>
-                <SelectItem value="min">Minutos (min)</SelectItem>
-                <SelectItem value="s">Segundos (s)</SelectItem>
+                <SelectItem value="h" className="text-xs uppercase">Horas (h)</SelectItem>
+                <SelectItem value="min" className="text-xs uppercase">Minutos (min)</SelectItem>
+                <SelectItem value="s" className="text-xs uppercase">Segundos (s)</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
-        <Button onClick={onSubmit} disabled={isLoading} className="w-full">
+        <Button onClick={onSubmit} disabled={isLoading} className="w-full bg-primary text-white hover:bg-black h-12 text-xs uppercase tracking-[0.2em] font-bold">
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Calculando...
+              Processando...
             </>
           ) : (
             "Calcular Matriz"

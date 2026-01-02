@@ -1,18 +1,18 @@
 export const Features = () => {
   const features = [
     {
-      name: "O-D Matrix Engine",
-      description: "Calculates shortest path distance and time between multiple network nodes using Dijkstra-based simulations.",
+      name: "Motor de Matriz O-D",
+      description: "Calcula a distância e o tempo do caminho mais curto entre múltiplos nós da rede usando simulações baseadas em Dijkstra.",
       image: "/abstract_route_optimization_nodes.png"
     },
     {
-      name: "Linear Programming",
-      description: "Mathematical approach to network flow and supply chain optimization using advanced heuristics.",
+      name: "Programação Linear",
+      description: "Abordagem matemática para fluxo de rede e otimização da cadeia de suprimentos usando heurísticas avançadas.",
       image: "/operations_research_flow_chart.png"
     },
     {
-      name: "Warehouse Automation",
-      description: "Seamless integration with automated logistics environments and real-time inventory tracking.",
+      name: "Automação Logística",
+      description: "Integração perfeita com ambientes logísticos automatizados e rastreamento de inventário em tempo real.",
       image: "/warehouse_automation.png"
     }
   ];
@@ -22,10 +22,10 @@ export const Features = () => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col lg:flex-row justify-between items-end gap-8 mb-20 border-b border-border pb-10">
           <h2 className="text-4xl md:text-6xl font-bold tracking-tighter max-w-xl uppercase leading-none">
-            SCIENTIFIC <br /> METHODOLOGY.
+            METODOLOGIA <br /> CIENTÍFICA.
           </h2>
           <p className="text-muted-foreground max-w-md text-sm leading-relaxed uppercase tracking-wide">
-            Our algorithms are grounded in classical operational research techniques, ensuring maximum efficiency in large-scale network computations.
+            Nossos algoritmos são fundamentados em técnicas clássicas de pesquisa operacional, garantindo máxima eficiência em cálculos de rede de larga escala.
           </p>
         </div>
 

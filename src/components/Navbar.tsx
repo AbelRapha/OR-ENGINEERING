@@ -9,8 +9,8 @@ export const Navbar = () => {
           <span className="font-display font-bold text-xl tracking-tighter uppercase">OR Engineering</span>
         </div>
         <div className="hidden md:flex items-center gap-8 text-xs font-medium uppercase tracking-widest">
-          <a href="#methodology" className="hover:text-primary transition-colors">Methodology</a>
-          <a href="#engine" className="bg-primary text-white px-6 py-2 hover:bg-black transition-colors">OR Engine</a>
+          <a href="#methodology" className="hover:text-primary transition-colors">Metodologia</a>
+          <a href="#engine" className="bg-primary text-white px-6 py-2 hover:bg-black transition-colors">Motor OR</a>
         </div>
       </div>
     </nav>

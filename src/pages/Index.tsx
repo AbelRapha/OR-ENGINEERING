@@ -33,7 +33,7 @@ const Index = () => {
     const destinationLines = destinations.split('\n').filter(line => line.trim() !== '');
 
     if (originLines.length === 0 || destinationLines.length === 0) {
-      showError("Please enter at least one origin and one destination address.");
+      showError("Por favor, insira pelo menos um endereço de origem e um de destino.");
       return;
     }
 
@@ -46,10 +46,10 @@ const Index = () => {
       let geocodedCount = 0;
       
       const geocodedOrigins: GeocodedAddress[] = [];
-      setStatusMessage(`Geocoding origins...`);
+      setStatusMessage(`Geocodificando origens...`);
       for (const address of originLines) {
         const result = await geocodeAddress(address);
-        if (!result) throw new Error(`Failed to geocode origin: "${address}"`);
+        if (!result) throw new Error(`Falha ao geocodificar origem: "${address}"`);
         geocodedOrigins.push(result);
         geocodedCount++;
         setProgress((geocodedCount / totalAddresses) * 70);
@@ -57,17 +57,17 @@ const Index = () => {
       }
 
       const geocodedDestinations: GeocodedAddress[] = [];
-      setStatusMessage(`Geocoding destinations...`);
+      setStatusMessage(`Geocodificando destinos...`);
       for (const address of destinationLines) {
         const result = await geocodeAddress(address);
-        if (!result) throw new Error(`Failed to geocode destination: "${address}"`);
+        if (!result) throw new Error(`Falha ao geocodificar destino: "${address}"`);
         geocodedDestinations.push(result);
         geocodedCount++;
         setProgress((geocodedCount / totalAddresses) * 70);
         await new Promise(resolve => setTimeout(resolve, 1100));
       }
 
-      setStatusMessage("Calculating network paths...");
+      setStatusMessage("Calculando caminhos na rede...");
       setProgress(75);
       const matrix = await getRoutingMatrix(geocodedOrigins, geocodedDestinations);
       
@@ -84,7 +84,7 @@ const Index = () => {
 
       setResults(finalResults);
       setProgress(100);
-      showSuccess("Calculation successful.");
+      showSuccess("Cálculo realizado com sucesso.");
     } catch (error: any) {
       showError(error.message);
       setProgress(0);
@@ -95,14 +95,11 @@ const Index = () => {
 
   const handleCalculateFromCoordinates = async () => {
     if (!originLats || !originLons || !destinationLats || !destinationLons) {
-      showError("Please fill all coordinate fields.");
+      showError("Por favor, preencha todos os campos de coordenadas.");
       return;
     }
-    // ... (rest of logic stays similar to previous version)
     setIsLoading(true);
-    // simplified for brevity in this UI overhaul block
     try {
-      // Logic from before
       const parseCoords = (lats: string, lons: string) => {
         const la = lats.split('\n').filter(l => l.trim());
         const lo = lons.split('\n').filter(l => l.trim());
@@ -110,7 +107,7 @@ const Index = () => {
           let latVal = coordinateFormat === 'dms' ? dmsToDd(latStr) : coordinateFormat === 'rad' ? radToDd(parseFloat(latStr)) : parseFloat(latStr);
           let lonVal = coordinateFormat === 'dms' ? dmsToDd(lo[i]) : coordinateFormat === 'rad' ? radToDd(parseFloat(lo[i])) : parseFloat(lo[i]);
           const [convLon, convLat] = convertToWGS84(lonVal, latVal, coordinateSystem);
-          return { lat: convLat.toString(), lon: convLon.toString(), name: `Point ${i + 1}` };
+          return { lat: convLat.toString(), lon: convLon.toString(), name: `Ponto ${i + 1}` };
         });
       };
       const o = parseCoords(originLats, originLons);
@@ -122,7 +119,7 @@ const Index = () => {
         originNames: o.map(x => x.name),
         destNames: d.map(x => x.name),
       });
-      showSuccess("Calculation successful.");
+      showSuccess("Cálculo realizado com sucesso.");
     } catch (e: any) { showError(e.message); } finally { setIsLoading(false); }
   };
 
@@ -136,14 +133,14 @@ const Index = () => {
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
             <div className="mb-12 border-l-4 border-primary pl-8">
-              <h2 className="text-4xl font-display font-bold uppercase tracking-tight mb-4">OR Engine v1.0</h2>
-              <p className="text-muted-foreground text-sm uppercase tracking-widest font-medium">Network Optimization & Matrix Generation</p>
+              <h2 className="text-4xl font-display font-bold uppercase tracking-tight mb-4">Motor OR v1.0</h2>
+              <p className="text-muted-foreground text-sm uppercase tracking-widest font-medium">Otimização de Redes e Geração de Matrizes</p>
             </div>
 
             <Tabs defaultValue="address" className="w-full">
               <TabsList className="bg-white p-1 border border-border mb-8 inline-flex">
-                <TabsTrigger value="address" className="text-[10px] uppercase tracking-widest px-8 py-3 data-[state=active]:bg-primary data-[state=active]:text-white">Geocode Addresses</TabsTrigger>
-                <TabsTrigger value="coordinates" className="text-[10px] uppercase tracking-widest px-8 py-3 data-[state=active]:bg-primary data-[state=active]:text-white">Coordinate Batch</TabsTrigger>
+                <TabsTrigger value="address" className="text-[10px] uppercase tracking-widest px-8 py-3 data-[state=active]:bg-primary data-[state=active]:text-white">Geocodificar Endereços</TabsTrigger>
+                <TabsTrigger value="coordinates" className="text-[10px] uppercase tracking-widest px-8 py-3 data-[state=active]:bg-primary data-[state=active]:text-white">Lote de Coordenadas</TabsTrigger>
               </TabsList>
               
               <TabsContent value="address">
@@ -176,7 +173,7 @@ const Index = () => {
             {isLoading && (
               <div className="mt-8 bg-white border border-border p-10">
                 <div className="flex justify-between text-[10px] uppercase tracking-widest mb-4 font-bold">
-                  <span>Processing...</span>
+                  <span>Processando...</span>
                   <span>{Math.round(progress)}%</span>
                 </div>
                 <Progress value={progress} className="h-1 bg-muted" />

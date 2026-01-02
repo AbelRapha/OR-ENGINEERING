@@ -26,7 +26,7 @@ export const MatrixTable = ({ title, headers, rows, rowLabels }: MatrixTableProp
           <Table>
             <TableHeader>
               <TableRow className="bg-muted hover:bg-muted border-b border-border">
-                <TableHead className="font-bold text-[10px] uppercase border-r border-border py-4">Origin \ Destination</TableHead>
+                <TableHead className="font-bold text-[10px] uppercase border-r border-border py-4">Origem \ Destino</TableHead>
                 {headers.map((header, index) => (
                   <TableHead key={index} className="text-[10px] uppercase font-bold px-4">{header}</TableHead>
                 ))}

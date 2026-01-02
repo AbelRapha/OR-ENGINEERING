@@ -11,25 +11,25 @@ export const Footer = () => {
               <span className="font-display font-bold text-xl tracking-tighter uppercase">OR Engineering</span>
             </div>
             <p className="text-white/40 text-sm max-w-sm leading-relaxed mb-8">
-              Operational Research tool for logistics optimization. Built for transport engineers and network planners.
+              Ferramenta de Pesquisa Operacional para otimização logística. Construída para engenheiros de transporte e planejadores de rede.
             </p>
             <div className="text-[10px] uppercase tracking-[0.3em] text-white/20">
-              © 2024 OR Engineering Systems. All rights reserved.
+              © 2024 OR Engineering Systems. Todos os direitos reservados.
             </div>
           </div>
           <div>
-            <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold mb-6">Contact</h4>
+            <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold mb-6">Contato</h4>
             <ul className="text-sm space-y-2 text-white/60">
-              <li>support@orengineering.com</li>
+              <li>suporte@orengineering.com</li>
               <li>+55 11 9999-9999</li>
             </ul>
           </div>
           <div>
-            <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold mb-6">Technical Data</h4>
+            <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold mb-6">Dados Técnicos</h4>
             <div className="p-4 border border-white/10 bg-white/5 text-[10px] font-mono leading-relaxed text-white/40">
-              API STATUS: ONLINE <br />
-              OSRM VERSION: 5.27.0 <br />
-              MAPS: OPENSTREETMAP
+              STATUS DA API: ONLINE <br />
+              VERSÃO OSRM: 5.27.0 <br />
+              MAPAS: OPENSTREETMAP
             </div>
           </div>
         </div>
