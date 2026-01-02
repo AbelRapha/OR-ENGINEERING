@@ -14,9 +14,6 @@ export const Footer = () => {
             <p className="text-white/40 text-sm max-w-sm leading-relaxed mb-8">
               Ferramenta de Pesquisa Operacional para otimização logística. Construída para engenheiros de transporte e planejadores de rede.
             </p>
-            <div className="text-[10px] uppercase tracking-[0.3em] text-white/20">
-              © 2024 OR Engineering Systems. Todos os direitos reservados.
-            </div>
           </div>
           <div>
             <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold mb-6">Contato</h4>
