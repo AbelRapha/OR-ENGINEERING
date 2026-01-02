@@ -5,10 +5,10 @@ export const Navbar = () => {
   return (
     <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <Truck className="h-6 w-6 text-primary" />
           <span className="font-display font-bold text-xl tracking-tighter uppercase">OR Engineering</span>
-        </div>
+        </Link>
         <div className="hidden md:flex items-center gap-8 text-xs font-medium uppercase tracking-widest">
           <Link to="/#methodology" className="hover:text-primary transition-colors">Metodologia</Link>
           <Link to="/documentation" className="hover:text-primary transition-colors">Documentação</Link>
