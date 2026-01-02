@@ -50,7 +50,7 @@ export const Features = () => {
           ))}
         </div>
         
-        {/* Seção sobre a iniciativa */}
+        {/* Seção sobre a iniciativa acadêmica */}
         <div className="mt-20 pt-10 border-t border-border">
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="flex-1">
